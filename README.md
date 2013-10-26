@@ -109,7 +109,22 @@ Redoubt::userCan('edit', $resource); // returns a boolean
 Redoubt::getPermissions();
 ```
 
-Again, this method has an optional permission to pass in a user.
+`getPermissions()` can take three parameters: a user, an object, and a permission. All of these parameters are optional. If the first parameter is left as null, it will use the current user.
+
+The following would get all the permissions the current user has for Articles.
+
+```php
+$permissions = Redoubt::getPermissions(null, 'Article');
+```
+
+Similarly, this would get all the permissions the current user has for editing Articles.
+
+```php
+$permissions = Redoubt::getPermissions(null, 'Article', 'edit');
+```
+
+You can pass in an Article object for the second parameter as well.
+
 
 ### To get users who have permissions to an object:
 
