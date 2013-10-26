@@ -16,6 +16,15 @@ interface ProviderInterface
 	public function findPermission($user, $object, $permission);
 
 	/**
+	 * Gets any UserObjectPermissions for a user, an object, or an object's permission
+	 * @param \Greggilbert\Redoubt\User\UserInterface $user
+	 * @param mixed|string|null $object
+	 * @param string|null $permission
+	 * @return \IteratorAggregate
+	 */
+	public function findAnyPermission($user = null, $object = null, $permission = null);
+	
+	/**
 	 * Find permissions by user
 	 * @param \Greggilbert\Redoubt\User\UserInterface $user
 	 * @return array(UserObjectPermission)

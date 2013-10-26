@@ -15,6 +15,15 @@ interface ProviderInterface
 	public function findPermissions($object, $permission);
 	
 	/**
+	 * Gets any GroupObjectPermissions for a list of groups, an object, or an object's permission
+	 * @param array(\Greggilbert\Redoubt\Group\GroupInterface) $groups
+	 * @param mixed|string|null $object
+	 * @param string|null $permission
+	 * @return \IteratorAggregate
+	 */
+	public function findAnyPermission($groups, $object = null, $permission = null);
+	
+	/**
 	 * Gets a single GroupObjectPermission for a given group, object, and permission
 	 * @param \Greggilbert\Redoubt\Group\GroupInterface $group
 	 * @param mixed $object

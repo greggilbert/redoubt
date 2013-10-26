@@ -17,6 +17,36 @@ class EloquentProvider implements ProviderInterface
 				->get();
 	}
 	
+	public function findAnyPermission($groups = array(), $object = null, $permission = null)
+	{
+		$objectType = (is_object($object) ? get_class($object) : $object);
+		
+		$ids = [];
+		foreach($groups as $group)
+		{
+			$ids[] = $group->id;
+		}
+		
+		$select = $this->model->select();
+		
+		if(!empty($ids))
+		{
+			$select->whereIn('group_id', $ids);
+		}
+		
+		if(!is_null($objectType))
+		{
+			$select->where('object_type', '=', $objectType);
+		}
+		
+		if(!is_null($permission))
+		{
+			$select->where('permission_id', '=', $permission->id);
+		}
+		
+		return $select->get();
+	}
+	
 	public function findPermission($group, $object, $permission)
 	{
 		return $this->model->where('group_id', '=', $group->id)

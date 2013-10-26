@@ -11,7 +11,9 @@ class EloquentProvider implements ProviderInterface
 	
 	public function findByPermissionAndObject($permission, $object)
 	{
-		return $this->model->where('object_type', '=', get_class($object))
+		$objectType = (is_object($object) ? get_class($object) : $object);
+		
+		return $this->model->where('object_type', '=', $objectType)
 					->where('codename', '=', $permission)
 					->first();
 	}

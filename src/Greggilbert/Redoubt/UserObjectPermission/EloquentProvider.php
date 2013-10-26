@@ -18,6 +18,30 @@ class EloquentProvider implements ProviderInterface
 				->first();
 	}
 	
+	public function findAnyPermission($user = null, $object = null, $permission = null)
+	{
+		$objectType = (is_object($object) ? get_class($object) : $object);
+		
+		$select = $this->model->select();
+		
+		if(!is_null($user))
+		{
+			$select->where('user_id', '=', $user->id);
+		}
+		
+		if(!is_null($objectType))
+		{
+			$select->where('object_type', '=', $objectType);
+		}
+		
+		if(!is_null($permission))
+		{
+			$select->where('permission_id', '=', $permission->id);
+		}
+		
+		return $select->get();
+	}
+	
 	public function findByUser($user)
 	{
 		return $this->model->where('user_id', '=', $user->id)

@@ -259,10 +259,18 @@ class Redoubt
 	
 	/**
 	 * Returns permissions for a given user
+	 * 
+	 * This function can be used multiple ways:
+	 *		1. to find all permissions for a user
+	 *		2. to find all permissions for a user on a specific model
+	 *		3. to find all permissions for a user on a specific model for a given codename
+	 * 
 	 * @param \Greggilbert\Redoubt\User\UserInterface|null $user
+	 * @param Object|null $object
+	 * @param string|null $permission
 	 * @return mixed
 	 */
-	public function getPermissions(User\UserInterface $user = null)
+	public function getPermissions(User\UserInterface $user = null, $object = null, $permission = null)
 	{
 		// if no user is specified, default to the Auth one
 		if(is_null($user))
@@ -270,6 +278,32 @@ class Redoubt
 			$user = app('auth')->user();
 		}
 		
+		if(is_null($object) && is_null($permission))
+		{
+			return $this->getPermissionsByUser($user);
+		}
+		
+		// if a specific permission was defined on the requested object, look that up
+		$permObject = null;
+		if(!is_null($object) && !is_null($permission))
+		{
+			$permObject = $this->permission->findByPermissionAndObject($permission, $object);
+		}
+		
+		$userPerms = $this->userObjectPermission->findAnyPermission($user, $object, $permObject);
+		$groupPerms = $this->groupObjectPermission->findAnyPermission($user->getGroups(), $object, $permObject);
+		
+		return $userPerms->merge($groupPerms);
+	}
+	
+	/**
+	 * Returns all permissions for a given user
+	 * 
+	 * @param \Greggilbert\Redoubt\User\UserInterface $user
+	 * @return mixed
+	 */
+	protected function getPermissionsByUser(User\UserInterface $user)
+	{
 		// get the user's direct permissions
 		$userPerms = $this->userObjectPermission->findByUser($user);
 		
