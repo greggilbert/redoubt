@@ -73,7 +73,12 @@ class EloquentProvider implements ProviderInterface
 		{
 			$ids[] = $group->id;
 		}
-				
+			
+		if(empty($ids))
+		{
+			return $ids;
+		}
+		
 		return $this->model->whereIn('group_id', $ids)
 				->get();
 	}
