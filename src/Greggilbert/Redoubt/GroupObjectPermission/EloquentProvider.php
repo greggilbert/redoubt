@@ -32,6 +32,8 @@ class EloquentProvider implements ProviderInterface
 		if(!empty($ids))
 		{
 			$select->whereIn('group_id', $ids);
+		}else{
+			$select->where('group_id', null);
 		}
 		
 		if(!is_null($objectType))
