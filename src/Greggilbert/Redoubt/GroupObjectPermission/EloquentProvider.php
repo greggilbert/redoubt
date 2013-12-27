@@ -27,13 +27,16 @@ class EloquentProvider implements ProviderInterface
 			$ids[] = $group->id;
 		}
 		
+		if(empty($ids))
+		{
+			return new \Illuminate\Database\Eloquent\Collection();
+		}
+		
 		$select = $this->model->select();
 		
 		if(!empty($ids))
 		{
 			$select->whereIn('group_id', $ids);
-		}else{
-			$select->where('group_id', null);
 		}
 		
 		if(!is_null($objectType))
@@ -78,7 +81,7 @@ class EloquentProvider implements ProviderInterface
 			
 		if(empty($ids))
 		{
-			return $ids;
+			return array();
 		}
 		
 		return $this->model->whereIn('group_id', $ids)
