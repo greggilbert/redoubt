@@ -59,4 +59,60 @@ class GroupTest extends BaseTest
 		$this->assertFalse($this->redoubt->userCan('edit', $article, $user));
 		$this->assertFalse($this->redoubt->userCan('view', $article, $user));
 	}
+	
+	public function testUserHasMultiplePermissionsThroughGroup()
+	{
+		$user = User::create(array(
+			'username' => 'testuser',
+		));
+		$user->save();
+		
+		$group = Group::create(array(
+			'name' => 'Test Group',
+		));
+		$group->save();
+		
+		$user->groups()->attach($group->id);
+		
+		$article = new Article;
+		$article->body = 'hello there';
+		$article->save();
+		
+		$this->redoubt->allowGroup(array('edit', 'view'), $article, $group);
+		
+		$this->assertTrue($this->redoubt->userCan('edit', $article, $user));
+		$this->assertTrue($this->redoubt->userCan('view', $article, $user));
+	}
+	
+	public function testDenyGroupMultiplePermissions()
+	{
+		$user = User::create(array(
+			'username' => 'testuser',
+		));
+		$user->save();
+		
+		$group = Group::create(array(
+			'name' => 'Test Group',
+		));
+		$group->save();
+		
+		$user->groups()->attach($group->id);
+		
+		$article = new Article;
+		$article->body = 'hello there';
+		$article->save();
+		
+		$this->redoubt->allowGroup('edit', $article, $group);
+		$this->redoubt->allowGroup('view', $article, $group);
+		
+		$this->assertTrue($this->redoubt->userCan('edit', $article, $user));
+		$this->assertTrue($this->redoubt->userCan('view', $article, $user));
+		
+		$this->redoubt->disallowGroup(array('edit', 'view'), $article, $group);
+				
+		$this->assertFalse($this->redoubt->userCan('edit', $article, $user));
+		$this->assertFalse($this->redoubt->userCan('view', $article, $user));
+		
+	}
+	
 }

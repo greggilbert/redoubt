@@ -106,14 +106,14 @@ class Redoubt
 	}
 	
 	/**
-	 * Give a user some permission to a specific object
+	 * Give a user permissions to a specific object
 	 * 
-	 * @param string $permission
+	 * @param string|array $permissions
 	 * @param mixed $object
 	 * @param User\UserInterface|null $user
 	 * @throws \Exception if the listed permission does not exist on the object's model
 	 */
-	public function allowUser($permission, $object, $user = null)
+	public function allowUser($permissions, $object, $user = null)
 	{
 		// if no user is specified, default to the Auth one
 		if(is_null($user))
@@ -121,6 +121,27 @@ class Redoubt
 			$user = app('auth')->user();
 		}
 		
+		if(!is_array($permissions))
+		{
+			$permissions = array($permissions);
+		}
+		
+		foreach($permissions as $permission)
+		{
+			$this->allowSinglePermission($permission, $object, $user);
+		}
+	}
+	
+	/**
+	 * Give a user some permission to a specific object
+	 * 
+	 * @param string $permission
+	 * @param mixed $object
+	 * @param User\UserInterface|null $user
+	 * @throws \Exception if the listed permission does not exist on the object's model
+	 */
+	protected function allowSinglePermission($permission, $object, $user)
+	{
 		// check to see if the permission exists
 		$permObject = $this->permission->findByPermissionAndObject($permission, $object);
 		
@@ -160,13 +181,13 @@ class Redoubt
 	}
 		
 	/**
-	 * Remove a user's permission to a specific object
+	 * Remove a user's permissions to a specific object
 	 * 
-	 * @param string $permission
+	 * @param string|array $permissions
 	 * @param mixed $object
 	 * @param User\UserInterface|null $user
 	 */
-	public function disallowUser($permission, $object, $user = null)
+	public function disallowUser($permissions, $object, $user = null)
 	{
 		// if no user is specified, default to the Auth one
 		if(is_null($user))
@@ -174,6 +195,26 @@ class Redoubt
 			$user = app('auth')->user();
 		}
 		
+		if(!is_array($permissions))
+		{
+			$permissions = array($permissions);
+		}
+		
+		foreach($permissions as $permission)
+		{
+			$this->disallowSinglePermission($permission, $object, $user);
+		}
+	}
+	
+	/**
+	 * Remove a user's permission to a specific object
+	 * 
+	 * @param string $permission
+	 * @param mixed $object
+	 * @param User\UserInterface|null $user
+	 */
+	protected function disallowSinglePermission($permission, $object, $user)
+	{
 		// check to see if the permission exists
 		$permObject = $this->permission->findByPermissionAndObject($permission, $object);
 		
@@ -187,14 +228,35 @@ class Redoubt
 	}
 	
 	/**
-	 * Give a group some permission to a specific object
+	 * Give a group permissions to a specific object
 	 * 
-	 * @param string $permission
+	 * @param string $permissions
 	 * @param mixed $object
 	 * @param Group\GroupInterface $group
 	 * @throws \Exception if the listed permission does not exist on the object's model
 	 */
-	public function allowGroup($permission, $object, $group)
+	public function allowGroup($permissions, $object, $group)
+	{
+		if(!is_array($permissions))
+		{
+			$permissions = array($permissions);
+		}
+		
+		foreach($permissions as $permission)
+		{
+			$this->allowSingleGroupPermission($permission, $object, $group);
+		}
+	}
+		
+	/**
+	 * Give a group some permission to a specific object
+	 * 
+	 * @param string $permissions
+	 * @param mixed $object
+	 * @param Group\GroupInterface $group
+	 * @throws \Exception if the listed permission does not exist on the object's model
+	 */
+	protected function allowSingleGroupPermission($permission, $object, $group)
 	{
 		// check to see if the permission exists
 		$permObject = $this->permission->findByPermissionAndObject($permission, $object);
@@ -235,13 +297,33 @@ class Redoubt
 	}
 	
 	/**
+	 * Remove a group's permissions to a specific object
+	 * 
+	 * @param string $permission
+	 * @param mixed $object
+	 * @param Group\GroupInterface $group
+	 */
+	public function disallowGroup($permissions, $object, $group)
+	{
+		if(!is_array($permissions))
+		{
+			$permissions = array($permissions);
+		}
+		
+		foreach($permissions as $permission)
+		{
+			$this->disallowSingleGroupPermission($permission, $object, $group);
+		}
+	}
+	
+	/**
 	 * Remove a group's specific permission to a specific object
 	 * 
 	 * @param string $permission
 	 * @param mixed $object
 	 * @param Group\GroupInterface $group
 	 */
-	public function disallowGroup($permission, $object, $group)
+	protected function disallowSingleGroupPermission($permission, $object, $group)
 	{
 		// check to see if the permission exists
 		$permObject = $this->permission->findByPermissionAndObject($permission, $object);

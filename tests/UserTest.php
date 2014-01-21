@@ -44,4 +44,45 @@ class UserTest extends BaseTest
 		
 		$this->assertFalse($this->redoubt->userCan('view', $article, $user));
 	}
+	
+	public function testUserHasMultiplePermissions()
+	{
+		$user = User::create(array(
+			'username' => 'testuser',
+		));
+		$user->save();
+		
+		$article = new Article;
+		$article->body = 'hello there';
+		$article->save();
+		
+		$this->redoubt->allowUser(array('view', 'edit'), $article, $user);
+		
+		$this->assertTrue($this->redoubt->userCan('view', $article, $user));
+		$this->assertTrue($this->redoubt->userCan('edit', $article, $user));
+		
+	}
+	
+	public function testDenyHasMultiplePermissions()
+	{
+		$user = User::create(array(
+			'username' => 'testuser',
+		));
+		$user->save();
+		
+		$article = new Article;
+		$article->body = 'hello there';
+		$article->save();
+		
+		$this->redoubt->allowUser(array('view', 'edit'), $article, $user);
+		
+		$this->assertTrue($this->redoubt->userCan('view', $article, $user));
+		$this->assertTrue($this->redoubt->userCan('edit', $article, $user));
+		
+		$this->redoubt->disallowUser(array('view', 'edit'), $article, $user);
+		
+		$this->assertFalse($this->redoubt->userCan('view', $article, $user));
+		$this->assertFalse($this->redoubt->userCan('edit', $article, $user));
+		
+	}
 }
