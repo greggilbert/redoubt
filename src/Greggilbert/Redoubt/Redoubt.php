@@ -230,7 +230,7 @@ class Redoubt
 	/**
 	 * Give a group permissions to a specific object
 	 * 
-	 * @param string $permissions
+	 * @param string|array $permissions
 	 * @param mixed $object
 	 * @param Group\GroupInterface $group
 	 * @throws \Exception if the listed permission does not exist on the object's model
@@ -251,7 +251,7 @@ class Redoubt
 	/**
 	 * Give a group some permission to a specific object
 	 * 
-	 * @param string $permissions
+	 * @param string $permission
 	 * @param mixed $object
 	 * @param Group\GroupInterface $group
 	 * @throws \Exception if the listed permission does not exist on the object's model
@@ -299,7 +299,7 @@ class Redoubt
 	/**
 	 * Remove a group's permissions to a specific object
 	 * 
-	 * @param string $permission
+	 * @param string|array $permissions
 	 * @param mixed $object
 	 * @param Group\GroupInterface $group
 	 */
