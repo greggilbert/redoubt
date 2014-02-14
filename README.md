@@ -142,6 +142,24 @@ Redoubt::getGroups('edit', $resource);
 
 Note that this will return GroupObjectPermission models; you'll need to then call `->getGroup()` to get the group.
 
+## Other functions
+
+### To check if a user is in a group:
+
+```php
+User::inGroup($groups);
+```
+
+`$groups` should be an array of `Group` objects.
+
+### To get users in a group:
+
+```php
+$group->getUsers()
+```
+
+This will return a collection of `User` objects.
+
 ## Extension
 
 Redoubt has a built-in User class, but if you want to extend it to use on your own, either extend `Greggilbert\Redoubt\User\EloquentUser` or implement the `Greggilbert\Redoubt\User\UserInterface` interface. You'll also need to publish the config for the package and change the user model listed there.
