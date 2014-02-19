@@ -19,13 +19,41 @@ class EloquentUser extends Eloquent implements UserInterface
 	public function inGroup($groups)
 	{
 		$group_ids = array();
+		$group_names = array();
+		
+		if(!is_array($groups))
+		{
+			$groups = array($groups);
+		}
 		
 		foreach($groups as $group)
 		{
-			$group_ids[] = $group->id;
+			if($group instanceof \Greggilbert\Redoubt\Group\GroupInterface)
+			{
+				$group_ids[] = $group->id;
+			}
+			elseif(is_numeric($group))
+			{
+				$group_ids[] = $group;
+			}
+			elseif(is_string($group))
+			{
+				$group_names[] = $group;
+			}
 		}
 		
-		$groups = $this->groups()->whereIn('group_id', $group_ids)->get();
+		$groups = $this->groups()
+					->where(function($query) use ($group_ids, $group_names) {
+						if(!empty($group_ids))
+						{
+							$query->orWhereIn('group_id', $group_ids);
+						}
+						if(!empty($group_names))
+						{
+							$query->orWhereIn('name', $group_names);
+						}
+					})
+					->get();
 		
 		return (count($groups) > 0 ? true : false);
 	}

@@ -115,4 +115,49 @@ class GroupTest extends BaseTest
 		
 	}
 	
+	public function testUserIsInGroup()
+	{
+		$user = User::create(array(
+			'username' => 'testuser',
+		));
+		$user->save();
+		
+		$group = Group::create(array(
+			'name' => 'Test Group',
+		));
+		$group->save();
+		
+		$user->groups()->attach($group->id);
+		
+		$this->assertTrue($user->inGroup($group));
+		$this->assertTrue($user->inGroup($group->id));
+		$this->assertFalse($user->inGroup(($group->id) + 1));
+	}
+	
+	public function testUserIsInGroups()
+	{
+		$user = User::create(array(
+			'username' => 'testuser',
+		));
+		$user->save();
+		
+		$group = Group::create(array(
+			'name' => 'Test Group',
+		));
+		$group->save();
+		
+		$user->groups()->attach($group->id);
+		
+		$group2 = Group::create(array(
+			'name' => 'Some other',
+		));
+		$group2->save();
+		
+		$user->groups()->attach($group2->id);
+		
+		$this->assertTrue($user->inGroup('Some other'));
+		$this->assertFalse($user->inGroup('Not a real group'));
+	}
+	
+	
 }
