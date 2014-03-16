@@ -19,4 +19,9 @@ class EloquentGroup extends Eloquent implements GroupInterface
 	{
 		return $this->belongsToMany(app('redoubt.user'), 'group_user', 'group_id', 'user_id');
 	}
+	
+	public function isAdmin()
+	{
+		return (isset($this->is_admin) && $this->is_admin == 1);
+	}
 }

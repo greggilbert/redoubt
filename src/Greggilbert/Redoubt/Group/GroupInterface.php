@@ -3,4 +3,6 @@
 interface GroupInterface
 {
 	public function getUsers();
+	
+	public function isAdmin();
 }

@@ -60,6 +60,24 @@ class GroupTest extends BaseTest
 		$this->assertFalse($this->redoubt->userCan('view', $article, $user));
 	}
 	
+	public function testAdminGroup()
+	{
+		$adminGroup = Group::create(array(
+			'name' => 'An Admin Group',
+			'is_admin' => true,
+		));
+		$adminGroup->save();
+		
+		$this->assertTrue($adminGroup->isAdmin());
+		
+		$group = Group::create(array(
+			'name' => 'Just some group',
+		));
+		$group->save();
+		
+		$this->assertFalse($group->isAdmin());
+	}
+	
 	public function testUserHasMultiplePermissionsThroughGroup()
 	{
 		$user = User::create(array(

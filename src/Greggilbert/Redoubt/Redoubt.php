@@ -42,6 +42,15 @@ class Redoubt
 	}
 	
 	/**
+	 * Returns the group provider
+	 * @return Group\ProviderInterface
+	 */
+	public function groupProvider()
+	{
+		return app('redoubt.group.provider');
+	}
+	
+	/**
 	 * Returns the user object
 	 * @return User\UserInterface
 	 */
@@ -74,7 +83,12 @@ class Redoubt
 			$user = app('auth')->user();
 		}
 		
-		// find the exact permission for the obejct
+		$adminGroups = $this->groupProvider()->findAdminGroups();
+		
+		if($adminGroups->count() > 0 && $user->inGroup($adminGroups))
+			return true;
+		
+		// find the exact permission for the object
 		$permObject = $this->permission->findByPermissionAndObject($permission, $object);
 		
 		// if the permission object doesn't exist, then they don't have access

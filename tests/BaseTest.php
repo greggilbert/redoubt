@@ -36,6 +36,7 @@ class BaseTest extends \Illuminate\Foundation\Testing\TestCase
 		Schema::create('groups', function(\Illuminate\Database\Schema\Blueprint $table) {
 			$table->increments('id');
 			$table->string('name');
+			$table->boolean('is_admin')->default(false);
 		});
 		
 		Schema::dropIfExists('group_user');

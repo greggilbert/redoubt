@@ -85,4 +85,25 @@ class UserTest extends BaseTest
 		$this->assertFalse($this->redoubt->userCan('edit', $article, $user));
 		
 	}
+	
+	public function testAdminUser()
+	{
+		$user = User::create(array(
+			'username' => 'testuser',
+		));
+		$user->save();
+		
+		$group = Group::create(array(
+			'name' => 'An admin group',
+			'is_admin' => true,
+		));
+		
+		$user->groups()->attach($group->id);
+		
+		$article = new Article;
+		$article->body = 'can you access this?';
+		$article->save();
+		
+		$this->assertTrue($this->redoubt->userCan('edit', $article, $user));
+	}
 }

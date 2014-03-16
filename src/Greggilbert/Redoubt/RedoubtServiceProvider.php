@@ -43,6 +43,7 @@ class RedoubtServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
+		$this->registerGroupProvider();
 		$this->registerPermissionProvider();
 		$this->registerGroupObjectPermissionProvider();
 		$this->registerUserObjectPermissionProvider();
@@ -62,6 +63,15 @@ class RedoubtServiceProvider extends ServiceProvider {
 		});
 	}
 
+	protected function registerGroupProvider()
+	{
+		$this->app['redoubt.group.provider'] = $this->app->share(function($app)
+		{
+			return new Group\EloquentProvider($app['redoubt.group']);
+		});
+		
+	}
+	
 	protected function registerPermissionProvider()
 	{
 		$this->app['redoubt.permission'] = $this->app->share(function($app)

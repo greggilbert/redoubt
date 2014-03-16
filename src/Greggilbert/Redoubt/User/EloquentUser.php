@@ -18,6 +18,9 @@ class EloquentUser extends Eloquent implements UserInterface
 	
 	public function inGroup($groups)
 	{
+		if(count($groups) < 1)
+			return false;
+		
 		$group_ids = array();
 		$group_names = array();
 		
