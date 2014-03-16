@@ -57,6 +57,8 @@ $group = Redoubt::group()->create(array(
 ));
 ```
 
+To create an admin group, add `'is_admin' => true,` into the `create()` statement.
+
 ### To associate a user to a resource:
 
 ```php
@@ -101,7 +103,7 @@ $user->groups()->attach($group);
 Redoubt::userCan('edit', $resource); // returns a boolean
 ```
 
-`Redoubt::userCan()` checks if the user has access or if they're in any groups that have that access.
+`Redoubt::userCan()` checks if the user has access or if they're in any groups that have that access. This function will return `true` for  user who is in any admin groups.
 
 ### To get all permissions that a user has:
 
