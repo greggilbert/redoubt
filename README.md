@@ -1,3 +1,7 @@
+# NOT MAINTAINED.
+
+This is an L4 package and won't be updated for L5, or at any point in the future. If you're looking for a more up to date package, try [BeatSwitch/lock](https://github.com/BeatSwitch/lock).
+
 Redoubt
 =========
 
